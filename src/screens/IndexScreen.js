@@ -16,6 +16,16 @@ const IndexScreen = ({ navigation }) => {
 
   useEffect(() => {
     getBlogPost();
+
+    // anytime index screen appears back, refetch blog posts again
+    const listener = navigation.addListener('didFocus', () => {
+      getBlogPost();
+    });
+
+    // remove listener, when component unmounts
+    return () => {
+      listener.remove();
+    };
   }, []);
 
   return (

@@ -12,21 +12,28 @@ const getBlogPost = (dispatch) => {
 };
 
 const addBlogPost = (dispatch) => {
-  return (title, content, callback) => {
-    dispatch({ type: 'ADD_BLOG_POST', payload: { title, content } });
-    callback();
+  return async (title, content, callback) => {
+    await jsonserver.post('/blogposts', { title, content });
+    // dispatch({ type: 'ADD_BLOG_POST', payload: { title, content } });
+    if (callback) {
+      callback();
+    }
   };
 };
 
 const editBlogPost = (dispatch) => {
-  return (id, title, content, callback) => {
+  return async (id, title, content, callback) => {
+    await jsonserver.put(`/blogposts/${id}`, { title, content });
     dispatch({ type: 'EDIT_BLOG_POST', payload: { title, content, id } });
     callback();
   };
 };
 
 const deleteBlogPost = (dispatch) => {
-  return (id) => {
+  return async (id) => {
+    await jsonserver.delete(`/blogposts/${id}`);
+
+    // update local blog posts state
     dispatch({ type: 'DELETE_BLOG_POST', payload: id });
   };
 };
